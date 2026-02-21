@@ -2,325 +2,261 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ذاكر - تطوير أبو الحسن tgg4</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ذاكر - أبو الحسن tgg4</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #10b981;
             --primary-dark: #064e3b;
-            --accent: #f59e0b;
-            --bg-body: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --muted: #64748b;
             --border: #e2e8f0;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
         }
 
         [data-theme="dark"] {
-            --bg-body: #0f172a;
-            --card-bg: #1e293b;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f1f5f9;
+            --muted: #94a3b8;
             --border: #334155;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg-body); color: var(--text-main); height: 100vh; overflow: hidden; display: flex; flex-direction: column; transition: background 0.3s, color 0.3s; }
+        body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; flex-direction: column; transition: 0.3s; }
 
-        /* Credits Bar */
-        .credits-banner { background: var(--primary); color: white; padding: 8px; text-align: center; font-size: 12px; font-weight: 700; z-index: 2000; box-shadow: 0 2px 10px rgba(16, 185, 129, 0.2); }
+        /* Header Rights */
+        .tgg4-banner { background: var(--primary); color: white; padding: 8px; text-align: center; font-size: 12px; font-weight: 800; z-index: 5000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
 
-        /* Header */
-        .main-header { padding: 15px 20px; background: var(--card-bg); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); z-index: 1000; }
-        .main-header h1 { font-size: 20px; font-weight: 800; color: var(--primary); }
-        .header-icons { display: flex; gap: 18px; font-size: 20px; cursor: pointer; }
+        .app-header { padding: 15px 20px; background: var(--card); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+        .app-header h1 { font-size: 19px; font-weight: 900; color: var(--primary); }
 
-        /* Search Area */
         .search-container { padding: 15px 20px; }
-        .search-box { background: var(--card-bg); display: flex; align-items: center; padding: 10px 18px; border-radius: 18px; border: 2px solid var(--primary); box-shadow: var(--shadow); }
-        .search-box input { border: none; outline: none; width: 100%; background: transparent; color: var(--text-main); font-size: 15px; padding: 0 10px; }
+        .search-input-group { background: var(--card); display: flex; align-items: center; padding: 10px 15px; border-radius: 15px; border: 2px solid var(--primary); box-shadow: var(--shadow); }
+        .search-input-group input { border: none; outline: none; width: 100%; background: transparent; color: var(--text); font-size: 15px; padding: 0 10px; }
 
-        /* Main Content Scroll */
-        .content-scroll { flex: 1; overflow-y: auto; padding: 10px 20px 180px; display: none; scroll-behavior: smooth; }
-        .content-scroll.active { display: block; }
+        /* Content Area */
+        .main-content { flex: 1; overflow-y: auto; padding: 10px 20px 200px; display: none; }
+        .main-content.active { display: block; }
+
+        .grid-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 15px; }
+        .grid-item { background: var(--card); padding: 20px 5px; border-radius: 15px; text-align: center; font-size: 13px; font-weight: 700; box-shadow: var(--shadow); border: 1px solid var(--border); cursor: pointer; }
         
-        .section-title { margin: 15px 0; font-size: 16px; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+        .track-card { background: var(--card); margin-bottom: 12px; padding: 15px; border-radius: 20px; display: flex; align-items: center; box-shadow: var(--shadow); border: 1px solid var(--border); }
+        .track-meta { flex: 1; margin-left: 10px; overflow: hidden; }
+        .track-meta h4 { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* Grid Layout */
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; }
-        .grid-card { background: var(--card-bg); padding: 18px 10px; border-radius: 16px; text-align: center; font-size: 13px; font-weight: 600; box-shadow: var(--shadow); border: 1px solid var(--border); transition: 0.2s; cursor: pointer; }
-        .grid-card:active { transform: scale(0.92); background: var(--primary); color: white; }
-
-        /* Track Item */
-        .track-card { background: var(--card-bg); margin-bottom: 15px; padding: 15px; border-radius: 20px; display: flex; align-items: center; box-shadow: var(--shadow); border: 1px solid var(--border); transition: 0.3s; }
-        .track-card:hover { border-color: var(--primary); }
-        .track-info { flex: 1; margin-left: 12px; overflow: hidden; }
-        .track-info h4 { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .track-info p { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-        
-        .play-icon-btn { width: 45px; height: 45px; background: var(--primary); color: white; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; }
+        .btn-play-sm { width: 42px; height: 42px; background: var(--primary); color: white; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; }
 
         /* Mini Player */
-        .mini-player { position: fixed; bottom: 85px; left: 15px; right: 15px; background: var(--card-bg); height: 75px; border-radius: 22px; display: none; align-items: center; padding: 0 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 2px solid var(--primary); z-index: 1500; animation: slideUp 0.4s ease; }
-        @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .mini-player { position: fixed; bottom: 90px; left: 15px; right: 15px; background: var(--card); height: 75px; border-radius: 22px; display: none; align-items: center; padding: 0 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 2px solid var(--primary); z-index: 1000; }
 
-        /* --- Full Page Player --- */
-        .player-overlay { position: fixed; inset: 0; background: var(--bg-body); z-index: 3000; display: none; flex-direction: column; padding: 40px 25px; text-align: center; }
-        .player-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .close-down { font-size: 28px; color: var(--primary); cursor: pointer; }
-
-        .album-artwork { width: 220px; height: 220px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); margin: 20px auto 40px; border-radius: 50px; display: flex; align-items: center; justify-content: center; color: white; font-size: 90px; box-shadow: 0 20px 40px rgba(16, 185, 129, 0.3); position: relative; overflow: hidden; }
+        /* Full Player (Optimized) */
+        .full-player { position: fixed; inset: 0; background: var(--bg); z-index: 4000; display: none; flex-direction: column; padding: 40px 25px; text-align: center; }
+        .artwork-area { position: relative; width: 220px; height: 220px; margin: 40px auto; border-radius: 50px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); display: flex; align-items: center; justify-content: center; color: white; font-size: 80px; box-shadow: 0 20px 40px rgba(16,185,129,0.3); }
         
-        /* New Smooth Progress Bar */
-        .progress-wrapper { width: 100%; margin: 40px 0 20px; }
-        .progress-bar-container { width: 100%; height: 10px; background: var(--border); border-radius: 20px; position: relative; cursor: pointer; overflow: hidden; }
-        .progress-bar-fill { height: 100%; background: var(--primary); position: absolute; right: 0; top: 0; width: 0%; border-radius: 20px; transition: width 0.1s linear; }
-        .time-labels { display: flex; justify-content: space-between; margin-top: 12px; font-size: 14px; font-weight: 700; color: var(--text-main); }
-
-        .controls-row { display: flex; justify-content: center; align-items: center; gap: 40px; margin-top: 20px; }
-        .play-main-btn { width: 85px; height: 85px; background: var(--primary); color: white; border-radius: 50%; border: none; font-size: 35px; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4); cursor: pointer; }
-        .side-btn { font-size: 30px; color: var(--primary); cursor: pointer; opacity: 0.8; }
-
-        .player-extras { display: flex; justify-content: space-around; margin-top: 50px; padding: 0 10px; }
-        .extra-action { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: var(--text-muted); cursor: pointer; }
-        .extra-action i { font-size: 20px; color: var(--primary); }
-
-        /* Loader Overlay */
-        .loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; color: white; backdrop-filter: blur(5px); }
-        .loader-spin { width: 60px; height: 60px; border: 5px solid rgba(255,255,255,0.1); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s infinite linear; }
+        /* New Loader & Action Button */
+        .loading-inner { position: absolute; inset: 0; background: rgba(0,0,0,0.7); border-radius: 50px; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 10; }
+        .spin { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.2); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        
-        #forcePlayBtn { display: none; background: var(--primary); color: white; border: none; padding: 15px 40px; border-radius: 30px; font-weight: bold; margin-top: 25px; box-shadow: 0 0 20px var(--primary); animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        /* Bottom Navigation */
-        .bottom-navbar { position: fixed; bottom: 0; width: 100%; background: var(--card-bg); display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid var(--border); z-index: 1000; }
-        .nav-tab { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; color: #94a3b8; cursor: pointer; transition: 0.3s; text-decoration: none; }
-        .nav-tab.active { color: var(--primary); font-weight: 800; }
-        .nav-tab i { font-size: 20px; }
+        #btn-play-now { display: none; background: var(--primary); color: white; border: none; padding: 15px 35px; border-radius: 30px; font-weight: 800; margin-top: 20px; box-shadow: 0 0 20px var(--primary); cursor: pointer; }
+
+        /* Correct RTL Progress Bar */
+        .progress-box { margin: 35px 0; }
+        .bar-container { width: 100%; height: 10px; background: var(--border); border-radius: 10px; position: relative; cursor: pointer; overflow: hidden; }
+        .bar-fill { height: 100%; background: var(--primary); position: absolute; right: 0; top: 0; width: 0%; border-radius: 10px; }
+        .time-labels { display: flex; justify-content: space-between; margin-top: 10px; font-size: 13px; font-weight: 800; color: var(--text); }
+
+        .player-controls { display: flex; justify-content: center; align-items: center; gap: 40px; margin-top: 20px; }
+        .main-play-btn { width: 85px; height: 85px; background: var(--primary); color: white; border-radius: 50%; border: none; font-size: 35px; box-shadow: 0 10px 25px rgba(16,185,129,0.4); cursor: pointer; }
+
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--card); display: flex; justify-content: space-around; padding: 12px 0 30px; border-top: 1px solid var(--border); z-index: 1000; }
+        .nav-link { display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 11px; color: #94a3b8; cursor: pointer; transition: 0.3s; }
+        .nav-link.active { color: var(--primary); font-weight: 900; }
     </style>
 </head>
 <body>
 
-    <!-- Upper Credits -->
-    <div class="credits-banner">تطوير: أبوالحسن عبدالهادي tgg4 - نسألكم الدعاء بالتوفيق</div>
+    <div class="tgg4-banner">tgg4 نسألكم الدعاء لي ولوالديّ بالتوفيق</div>
 
-    <header class="main-header">
-        <div class="header-icons">
-            <i class="fas fa-moon" onclick="toggleDarkMode()"></i>
-            <i class="fas fa-info-circle" onclick="showAbout()"></i>
+    <header class="app-header">
+        <div style="display:flex; gap:15px;">
+            <i class="fas fa-moon" onclick="toggleDark()"></i>
+            <i class="fas fa-info-circle" onclick="showInfo()"></i>
         </div>
         <h1>ذاكر</h1>
-        <i class="fas fa-hourglass-start" onclick="setTimer()"></i>
+        <i class="fas fa-clock" onclick="setTimer()"></i>
     </header>
 
     <div class="search-container">
-        <div class="search-box">
-            <i class="fas fa-search" style="color:var(--primary)" onclick="runSearch()"></i>
-            <input type="text" id="searchInput" placeholder="ابحث عن قارئ أو سورة أو دعاء...">
+        <div class="search-input-group">
+            <i class="fas fa-search" style="color:var(--primary)" onclick="performSearch()"></i>
+            <input type="text" id="qInput" placeholder="ابحث عن قارئ أو سورة أو دعاء...">
         </div>
     </div>
 
-    <!-- Page: Home -->
-    <main id="page-home" class="content-scroll active">
-        <div class="section-title"><i class="fas fa-star"></i> قراء مقترحون</div>
-        <div class="grid-container">
-            <div class="grid-card" onclick="quickSearch('ميثم التمار')">ميثم التمار</div>
-            <div class="grid-card" onclick="quickSearch('أباذر الحلواجي')">أباذر الحلواجي</div>
-            <div class="grid-card" onclick="quickSearch('عامر الكاظمي')">عامر الكاظمي</div>
-            <div class="grid-card" onclick="quickSearch('باسم الكربلائي')">باسم الكربلائي</div>
-            <div class="grid-card" onclick="quickSearch('هاني الخزعلي')">هاني الخزعلي</div>
-            <div class="grid-card" onclick="quickSearch('عبد الحي قنبر')">عبد الحي قنبر</div>
+    <!-- Views -->
+    <main id="view-home" class="main-content active">
+        <h4 style="color:var(--primary)">أبرز القراء</h4>
+        <div class="grid-list">
+            <div class="grid-item" onclick="quick('ميثم التمار')">ميثم التمار</div>
+            <div class="grid-item" onclick="quick('أباذر الحلواجي')">أباذر الحلواجي</div>
+            <div class="grid-item" onclick="quick('عامر الكاظمي')">عامر الكاظمي</div>
+            <div class="grid-item" onclick="quick('باسم الكربلائي')">باسم الكربلائي</div>
+            <div class="grid-item" onclick="quick('عبد الحي قنبر')">عبد الحي قنبر</div>
+            <div class="grid-item" onclick="quick('هاني الخزعلي')">هاني الخزعلي</div>
         </div>
     </main>
 
-    <!-- Page: Surahs (Full 114) -->
-    <main id="page-surahs" class="content-scroll">
-        <div class="section-title"><i class="fas fa-book-quran"></i> سور القرآن الكريم</div>
-        <div class="grid-container" id="surahGrid"></div>
-    </main>
-
-    <!-- Page: Duas -->
-    <main id="page-duas" class="content-scroll">
-        <div class="section-title"><i class="fas fa-hands-praying"></i> الأدعية والزيارات</div>
-        <div class="grid-container" id="duaGrid"></div>
-    </main>
-
-    <!-- Page: Favorites -->
-    <main id="page-favs" class="content-scroll">
-        <div class="section-title"><i class="fas fa-heart" style="color:red"></i> تلاواتك المفضلة</div>
-        <div id="favList"></div>
-    </main>
-
-    <!-- Page: Results -->
-    <main id="page-results" class="content-scroll">
-        <div class="section-title"><i class="fas fa-list"></i> نتائج البحث</div>
-        <div id="resultsList"></div>
-    </main>
-
-    <!-- Loading Screen -->
-    <div id="loadingOverlay" class="loading-overlay">
-        <div class="loader-spin"></div>
-        <p id="loaderMsg" style="margin-top:20px; font-weight:700;">جاري تشغيل ...</p>
-        <button id="forcePlayBtn" onclick="manualPlay()">بدء التشغيل الآن</button>
-        <p style="margin-top:40px; font-size:11px; opacity:0.6;">tgg4</p>
-    </div>
+    <main id="view-surahs" class="main-content"><div class="grid-list" id="surahGrid"></div></main>
+    <main id="view-duas" class="main-content"><div class="grid-list" id="duaGrid"></div></main>
+    <main id="view-favs" class="main-content"><div id="favList"></div></main>
+    <main id="view-results" class="main-content"><div id="resList"></div></main>
 
     <!-- Mini Player -->
-    <div id="miniPlayer" class="mini-player" onclick="openFullPlayer()">
-        <div style="flex:1; overflow:hidden; margin-left:15px;">
-            <div id="miniTitle" style="font-size:13px; font-weight:bold; white-space:nowrap; text-overflow:ellipsis; overflow:hidden;">لم يتم اختيار تلاوة</div>
-            <div style="font-size:10px; color:var(--primary); font-weight:700;">جاري الاستماع الآن...</div>
+    <div id="miniPlayer" class="mini-player" onclick="openFull()">
+        <div style="flex:1; overflow:hidden; margin-left:10px;">
+            <div id="mTitle" style="font-size:13px; font-weight:800; white-space:nowrap; text-overflow:ellipsis; overflow:hidden;">اختر تلاوة</div>
+            <div style="font-size:10px; color:var(--primary); font-weight:800;">جاري الاستماع الآن...</div>
         </div>
-        <button class="play-icon-btn" onclick="event.stopPropagation(); togglePlay()">
-            <i class="fas fa-play" id="miniPlayIcon"></i>
+        <button class="btn-play-sm" onclick="event.stopPropagation(); togglePlay()">
+            <i class="fas fa-play" id="mIcon"></i>
         </button>
     </div>
 
-    <!-- Full Player Page -->
-    <div id="fullPlayerPage" class="player-overlay">
-        <div class="player-header">
-            <i class="fas fa-chevron-down close-down" onclick="closeFullPlayer()"></i>
-            <div style="font-weight:800; font-size:14px; color:var(--primary);"> ذاكر</div>
-            <i class="fas fa-share-nodes" style="font-size:22px; color:var(--text-muted);" onclick="shareApp()"></i>
+    <!-- Full Player -->
+    <div id="fullPlayer" class="full-player">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <i class="fas fa-chevron-down" style="font-size:28px; color:var(--primary)" onclick="closeFull()"></i>
+            <div style="font-weight:900; color:var(--primary);">ذاكر</div>
+            <i class="fas fa-share-nodes" style="font-size:22px;" onclick="shareApp()"></i>
         </div>
 
-        <div class="album-artwork"><i class="fas fa-quran"></i></div>
-        
-        <h2 id="fullPlayerTitle" style="font-size:18px; font-weight:800; padding:0 10px;">-</h2>
-        <p style="font-size:12px; color:var(--primary); font-weight:700; margin-top:5px;"> tgg4</p>
+        <div class="artwork-area">
+            <i class="fas fa-quran"></i>
+            <div id="playerLoader" class="loading-inner">
+                <div class="spin"></div>
+                <p style="color:white; font-size:12px; margin-top:15px; font-weight:bold;">جاري تحضير الملف...</p>
+            </div>
+        </div>
 
-        <div class="progress-wrapper">
-            <div class="progress-bar-container" id="progressBar" onclick="handleSeek(event)">
-                <div class="progress-bar-fill" id="progressFill"></div>
+        <h2 id="fTitle" style="font-size:18px; font-weight:900;">-</h2>
+        <button id="btn-play-now" onclick="forceAudio()">تشغيل الآن</button>
+
+        <div class="progress-box">
+            <div class="bar-container" id="pBar" onclick="seekAudio(event)">
+                <div class="bar-fill" id="pFill"></div>
             </div>
             <div class="time-labels">
-                <span id="currentTime">00:00</span>
-                <span id="duration">00:00</span>
+                <span id="cTime">00:00</span>
+                <span id="tTime">00:00</span>
             </div>
         </div>
 
-        <div class="controls-row">
-            <i class="fas fa-backward-step side-btn" onclick="playPrevNext(-1)"></i>
-            <button class="play-main-btn" onclick="togglePlay()">
-                <i class="fas fa-play" id="mainPlayIcon"></i>
-            </button>
-            <i class="fas fa-forward-step side-btn" onclick="playPrevNext(1)"></i>
+        <div class="player-controls">
+            <i class="fas fa-backward-step" style="font-size:28px; color:var(--primary)" onclick="nextPrev(-1)"></i>
+            <button class="main-play-btn" onclick="togglePlay()"><i class="fas fa-play" id="fIcon"></i></button>
+            <i class="fas fa-forward-step" style="font-size:28px; color:var(--primary)" onclick="nextPrev(1)"></i>
         </div>
 
-        <div class="player-extras">
-            <div class="extra-action" onclick="cycleSpeed()">
-                <i class="fas fa-gauge-high"></i>
-                <span id="speedDisplay">1.0x</span>
-            </div>
-            <div class="extra-action" id="favBtnMain" onclick="toggleCurrentFav()">
-                <i class="far fa-heart" id="favHeartIcon"></i>
-                <span>حفظ</span>
-            </div>
-            <div class="extra-action">
-                <i class="fas fa-volume-high"></i>
-                <input type="range" min="0" max="1" step="0.1" value="1" oninput="audio.volume = this.value" style="width:60px; accent-color:var(--primary)">
-            </div>
+        <div style="margin-top:40px; display:flex; justify-content:space-around; align-items:center; color:var(--muted)">
+            <div onclick="setSpeed()" style="cursor:pointer; font-weight:800;"><i class="fas fa-gauge-high"></i> <span id="speedVal">1.0x</span></div>
+            <div onclick="toggleFav()" style="cursor:pointer; font-weight:800;"><i id="fHeart" class="far fa-heart"></i> حفظ</div>
         </div>
     </div>
 
     <!-- Bottom Nav -->
-    <nav class="bottom-navbar">
-        <div class="nav-tab active" onclick="switchPage('home', this)"><i class="fas fa-house"></i><span>الرئيسية</span></div>
-        <div class="nav-tab" onclick="switchPage('surahs', this)"><i class="fas fa-book-open"></i><span>السور</span></div>
-        <div class="nav-tab" onclick="switchPage('duas', this)"><i class="fas fa-hands-praying"></i><span>الأدعية</span></div>
-        <div class="nav-tab" onclick="switchPage('favs', this)"><i class="fas fa-heart"></i><span>المفضلة</span></div>
+    <nav class="bottom-nav">
+        <div class="nav-link active" onclick="switchTab('home', this)"><i class="fas fa-home"></i><span>الرئيسية</span></div>
+        <div class="nav-link" onclick="switchTab('surahs', this)"><i class="fas fa-book-open"></i><span>السور</span></div>
+        <div class="nav-link" onclick="switchTab('duas', this)"><i class="fas fa-hands-praying"></i><span>الأدعية</span></div>
+        <div class="nav-link" onclick="switchTab('favs', this)"><i class="fas fa-heart"></i><span>المفضلة</span></div>
     </nav>
 
-    <audio id="mainAudio" style="display:none" preload="auto"></audio>
+    <audio id="coreAudio" style="display:none"></audio>
 
     <script>
         const surahs = ["الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", "الأنفال", "التوبة", "يونس", "هود", "يوسف", "الرعد", "إبراهيم", "الحجر", "النحل", "الإسراء", "الكهف", "مريم", "طه", "الأنبياء", "الحج", "المؤمنون", "النور", "الفرقان", "الشعراء", "النمل", "القصص", "العنكبوت", "الروم", "لقمان", "السجدة", "الأحزاب", "سبأ", "فاطر", "يس", "الصافات", "ص", "الزمر", "غافر", "فصلت", "الشورى", "الزخرف", "الدخان", "الجاثية", "الأحقاف", "محمد", "الفتح", "الحجرات", "ق", "الذاريات", "الطور", "النجم", "القمر", "الرحمن", "الواقعة", "الحديد", "المجادلة", "الحشر", "الممتحنة", "الصف", "الجمعة", "المنافقون", "التغابن", "الطلاق", "التحريم", "الملك", "القلم", "الحاقة", "المعارج", "نوح", "الجن", "المزمل", "المدثر", "القيامة", "الإنسان", "المرسلات", "النبأ", "النازعات", "عبس", "التكوير", "الانفطار", "المطففين", "الانشقاق", "البروج", "الطارق", "الأعلى", "الغاشية", "الفجر", "البلد", "الشمس", "الليل", "الضحى", "الشرح", "التين", "العلق", "القدر", "البينة", "الزلزلة", "العاديات", "القارعة", "التكاثر", "العصر", "الهمزة", "الفيل", "قريش", "الماعون", "الكوثر", "الكافرون", "النصر", "المسد", "الإخلاص", "الفلق", "الناس"];
-        const duas = ["دعاء كميل", "دعاء التوسل", "دعاء الندبة", "زيارة عاشوراء", "حديث الكساء", "دعاء الصباح", "دعاء العهد", "زيارة وارث", "دعاء الجوشن الكبير", "المناجاة الشعبانية", "مناجاة التائبين", "زيارة أمين الله"];
+        const duas = ["دعاء كميل", "دعاء التوسل", "دعاء الندبة", "زيارة عاشوراء", "حديث الكساء", "دعاء الصباح", "دعاء العهد", "زيارة وارث", "دعاء الجوشن الكبير", "المناجاة الشعبانية", "زيارة أمين الله"];
         
-        const audio = document.getElementById('mainAudio');
+        const audio = document.getElementById('coreAudio');
         let playlist = [];
-        let currentIndex = -1;
-        let favs = JSON.parse(localStorage.getItem('zakir_favs_v20')) || [];
+        let activeIdx = -1;
+        let favs = JSON.parse(localStorage.getItem('zakir_favs_v22')) || [];
 
         function init() {
-            document.getElementById('surahGrid').innerHTML = surahs.map(s => `<div class="grid-card" onclick="quickSearch('سورة ${s}')">${s}</div>`).join('');
-            document.getElementById('duaGrid').innerHTML = duas.map(d => `<div class="grid-card" onclick="quickSearch('${d}')">${d}</div>`).join('');
+            document.getElementById('surahGrid').innerHTML = surahs.map(s => `<div class="grid-item" onclick="quick('سورة ${s}')">${s}</div>`).join('');
+            document.getElementById('duaGrid').innerHTML = duas.map(d => `<div class="grid-item" onclick="quick('${d}')">${d}</div>`).join('');
             if(localStorage.getItem('zakir_theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
             refreshFavs();
         }
 
-        async function playTrack(index, list) {
+        async function play(index, list) {
             playlist = list;
-            currentIndex = index;
-            const item = playlist[index];
+            activeIdx = index;
+            const track = playlist[index];
             
-            // UI Update
-            document.getElementById('miniTitle').innerText = item.title;
-            document.getElementById('fullPlayerTitle').innerText = item.title;
+            // 1. فتح فوري للمشغل
+            openFull();
+            document.getElementById('fTitle').innerText = track.title;
+            document.getElementById('mTitle').innerText = track.title;
             document.getElementById('miniPlayer').style.display = 'flex';
-            openFullPlayer();
-
-            // Loader
-            const loader = document.getElementById('loadingOverlay');
-            const forceBtn = document.getElementById('forcePlayBtn');
+            
+            const loader = document.getElementById('playerLoader');
+            const forceBtn = document.getElementById('btn-play-now');
             loader.style.display = 'flex';
             forceBtn.style.display = 'none';
-            document.getElementById('loaderMsg').innerText = "جاري التشغيل ...";
 
             try {
+                // 🛠 تحسين جلب الرابط ليتوافق مع GitHub
                 const response = await fetch("https://api.vidssave.com/api/contentsite_api/media/parse", {
                     method: "POST",
                     headers: { "Content-Type": "application/x-www-form-urlencoded" },
                     referrerPolicy: "no-referrer",
-                    body: `auth=20250901majwlqo&domain=api-ak.vidssave.com&origin=source&link=${encodeURIComponent(item.url)}`
+                    body: `auth=20250901majwlqo&domain=api-ak.vidssave.com&origin=source&link=${encodeURIComponent(track.url)}`
                 });
                 
                 const res = await response.json();
-                const link = res.data.resources.find(r => r.type === 'audio' || r.format === 'mp3').download_url;
+                const mp3 = res.data.resources.find(r => r.type === 'audio' || r.format === 'mp3').download_url;
                 
-                audio.src = link.startsWith('//') ? 'https:' + link : link;
+                // ⚡️ تحرير محرك الصوت
+                audio.src = mp3.startsWith('//') ? 'https:' + mp3 : mp3;
                 
-                // Autoplay attempt
                 audio.play().then(() => {
                     loader.style.display = 'none';
                 }).catch(() => {
-                    loader.querySelector('.loader-spin').style.display = 'none';
-                    document.getElementById('loaderMsg').innerText = "جاهز للتشغيل.. اضغط للبدء";
+                    // إذا اعترض المتصفح
+                    loader.style.display = 'none';
                     forceBtn.style.display = 'block';
                 });
 
-                // Media Session API (Background play & Lock screen)
+                // 📱 مزامنة شاشة القفل لمنع قفزة الـ 6 دقائق
                 if ('mediaSession' in navigator) {
                     navigator.mediaSession.metadata = new MediaMetadata({
-                        title: item.title, artist: 'أبو الحسن tgg4',
+                        title: track.title, artist: 'tgg4',
                         artwork: [{ src: 'https://via.placeholder.com/512/10b981/ffffff?text=tgg4', sizes: '512x512', type: 'image/png' }]
                     });
-                    
-                    navigator.mediaSession.setActionHandler('seekto', (details) => {
-                        audio.currentTime = details.seekTime;
-                        updateSystemPosition();
-                    });
+                    navigator.mediaSession.setActionHandler('seekto', (d) => { audio.currentTime = d.seekTime; syncSys(); });
                     navigator.mediaSession.setActionHandler('play', () => audio.play());
                     navigator.mediaSession.setActionHandler('pause', () => audio.pause());
-                    navigator.mediaSession.setActionHandler('previoustrack', () => playPrevNext(-1));
-                    navigator.mediaSession.setActionHandler('nexttrack', () => playPrevNext(1));
                 }
                 updateFavIcon();
             } catch (e) {
                 loader.style.display = 'none';
-                alert("تعذر الاتصال. أبو الحسن ينصحك بفتح الرابط في متصفح Chrome.");
+                alert("يرجى استخدام متصفح Chrome. تطوير: أبو الحسن tgg4");
             }
         }
 
-        function manualPlay() { audio.play(); document.getElementById('loadingOverlay').style.display = 'none'; }
+        function forceAudio() { audio.play(); document.getElementById('btn-play-now').style.display = 'none'; }
 
-        // Core Logic (Fixed Progress Bar)
-        function updateSystemPosition() {
+        // Core Player Logic (Fixed Progress Bar)
+        function syncSys() {
             if ('mediaSession' in navigator && 'setPositionState' in navigator.mediaSession) {
                 if (audio.duration && isFinite(audio.duration)) {
                     navigator.mediaSession.setPositionState({
@@ -332,43 +268,32 @@
             }
         }
 
-        audio.onplaying = () => { document.getElementById('loadingOverlay').style.display = 'none'; };
-        audio.onplay = () => { 
-            document.getElementById('mainPlayIcon').className = 'fas fa-pause'; 
-            document.getElementById('miniPlayIcon').className = 'fas fa-pause';
-            updateSystemPosition();
-        };
-        audio.onpause = () => { 
-            document.getElementById('mainPlayIcon').className = 'fas fa-play'; 
-            document.getElementById('miniPlayIcon').className = 'fas fa-play';
-        };
+        audio.onplaying = () => { document.getElementById('playerLoader').style.display = 'none'; };
+        audio.onplay = () => { document.getElementById('fIcon').className = 'fas fa-pause'; document.getElementById('mIcon').className = 'fas fa-pause'; syncSys(); };
+        audio.onpause = () => { document.getElementById('fIcon').className = 'fas fa-play'; document.getElementById('mIcon').className = 'fas fa-play'; };
 
         audio.ontimeupdate = () => {
             if(!audio.duration || isNaN(audio.duration)) return;
-            // Visual progress (RTL calculated)
             const pct = (audio.currentTime / audio.duration) * 100;
-            document.getElementById('progressFill').style.width = pct + '%';
-            document.getElementById('currentTime').innerText = formatTime(audio.currentTime);
-            document.getElementById('duration').innerText = formatTime(audio.duration);
-            
-            // Sync with system every few seconds to prevent "6-min jump"
-            if(Math.floor(audio.currentTime) % 2 === 0) updateSystemPosition();
+            document.getElementById('pFill').style.width = pct + '%';
+            document.getElementById('cTime').innerText = fmt(audio.currentTime);
+            document.getElementById('tTime').innerText = fmt(audio.duration);
+            if(Math.floor(audio.currentTime) % 2 === 0) syncSys();
         };
 
-        function handleSeek(e) {
-            const rect = document.getElementById('progressBar').getBoundingClientRect();
-            // RTL Logic: Click position is relative to left, but bar starts from right
+        function seekAudio(e) {
+            const rect = document.getElementById('pBar').getBoundingClientRect();
             const x = e.clientX - rect.left;
-            const pct = 1 - (x / rect.width); 
+            const pct = 1 - (x / rect.width); // RTL Fix
             audio.currentTime = pct * audio.duration;
-            updateSystemPosition();
+            syncSys();
         }
 
         async function performSearch() {
-            const q = document.getElementById('searchInput').value.trim();
+            const q = document.getElementById('qInput').value.trim();
             if(!q) return;
-            switchPage('results', null);
-            document.getElementById('resultsList').innerHTML = '<p style="text-align:center; padding:20px;">جاري البحث عن تلاوات خاشعة...</p>';
+            switchTab('results', null);
+            document.getElementById('resList').innerHTML = '<p style="text-align:center; padding:30px; opacity:0.5;">جاري البحث بواسطة tgg4...</p>';
             try {
                 const response = await fetch("https://vidssave.com/api/proxy", {
                     method: "POST", headers: { "Content-Type": "application/json" }, referrerPolicy: "no-referrer",
@@ -376,69 +301,42 @@
                 });
                 const data = await response.json();
                 const items = data.data.items || [];
-                document.getElementById('resultsList').innerHTML = items.map((item, index) => `
+                document.getElementById('resList').innerHTML = items.map((item, index) => `
                     <div class="track-card">
-                        <div class="track-info" onclick='playTrack(${index}, ${JSON.stringify(items).replace(/'/g, "&apos;")})'>
+                        <div class="track-meta" onclick='play(${index}, ${JSON.stringify(items).replace(/'/g, "&apos;")})'>
                             <h4>${item.title}</h4>
-                            <p>بصوت كبار القراء</p>
                         </div>
-                        <button class="play-icon-btn" onclick='playTrack(${index}, ${JSON.stringify(items).replace(/'/g, "&apos;")})'>
-                            <i class="fas fa-play"></i>
-                        </button>
+                        <button class="btn-play-sm" onclick='play(${index}, ${JSON.stringify(items).replace(/'/g, "&apos;")})'><i class="fas fa-play"></i></button>
                     </div>
                 `).join('');
-            } catch (e) { alert("حدث خطأ في البحث"); }
+            } catch (e) { }
         }
 
-        // Helper Functions
-        function formatTime(s) { if(isNaN(s)) return "00:00"; const m = Math.floor(s/60), sec = Math.floor(s%60); return (m<10?'0'+m:m)+':'+(sec<10?'0'+sec:sec); }
+        // Helpers
+        function fmt(s) { if(isNaN(s)) return "00:00"; const m = Math.floor(s/60), sec = Math.floor(s%60); return (m<10?'0'+m:m)+':'+(sec<10?'0'+sec:sec); }
         function togglePlay() { audio.paused ? audio.play() : audio.pause(); }
-        function switchPage(id, el) {
-            document.querySelectorAll('.content-scroll').forEach(p => p.classList.remove('active'));
-            document.getElementById('page-' + id).classList.add('active');
-            if(el) { document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); }
+        function switchTab(id, el) {
+            document.querySelectorAll('.main-content').forEach(v => v.classList.remove('active'));
+            document.getElementById('view-' + id).classList.add('active');
+            if(el) { document.querySelectorAll('.nav-link').forEach(d => d.classList.remove('active')); el.classList.add('active'); }
         }
-        function toggleDarkMode() { 
-            const isDark = document.body.hasAttribute('data-theme');
-            isDark ? document.body.removeAttribute('data-theme') : document.body.setAttribute('data-theme', 'dark');
-            localStorage.setItem('zakir_theme', isDark ? 'light' : 'dark');
-        }
-        function toggleCurrentFav() {
-            if(currentIndex === -1) return;
-            const item = playlist[currentIndex];
-            const idx = favs.findIndex(f => f.url === item.url);
-            idx > -1 ? favs.splice(idx, 1) : favs.push(item);
-            localStorage.setItem('zakir_favs_v20', JSON.stringify(favs));
-            updateFavIcon(); refreshFavs();
-        }
-        function updateFavIcon() {
-            if(currentIndex === -1) return;
-            const isFav = favs.some(f => f.url === playlist[currentIndex].url);
-            document.getElementById('favHeartIcon').className = isFav ? 'fas fa-heart' : 'far fa-heart';
-            document.getElementById('favHeartIcon').style.color = isFav ? 'red' : '';
-        }
-        function refreshFavs() {
-            document.getElementById('favList').innerHTML = favs.map((item, index) => `
-                <div class="track-card">
-                    <div class="track-info" onclick='playTrack(${index}, ${JSON.stringify(favs).replace(/'/g, "&apos;")})'>
-                        <h4>${item.title}</h4>
-                    </div>
-                    <button class="play-icon-btn" onclick='playTrack(${index}, ${JSON.stringify(favs).replace(/'/g, "&apos;")})'><i class="fas fa-play"></i></button>
-                </div>
-            `).join(favs.length ? '' : '<p style="text-align:center; opacity:0.6; padding-top:40px;">لا يوجد تلاوات في المفضلة</p>');
-        }
-        function quickSearch(q) { document.getElementById('searchInput').value = q; performSearch(); }
-        function openFullPlayer() { document.getElementById('fullPlayerPage').style.display = 'flex'; }
-        function closeFullPlayer() { document.getElementById('fullPlayerPage').style.display = 'none'; }
-        function playPrevNext(dir) { if(currentIndex+dir >= 0 && currentIndex+dir < playlist.length) playTrack(currentIndex+dir, playlist); }
-        function cycleSpeed() { const s = [1, 1.25, 1.5, 2, 0.75]; let next = s[(s.indexOf(audio.playbackRate) + 1) % s.length]; audio.playbackRate = next; document.getElementById('speedDisplay').innerText = next + 'x'; }
+        function toggleDark() { const isD = document.body.hasAttribute('data-theme'); isD ? document.body.removeAttribute('data-theme') : document.body.setAttribute('data-theme', 'dark'); localStorage.setItem('zakir_theme', isD ? 'light' : 'dark'); }
+        function toggleFav() { if(activeIdx === -1) return; const t = playlist[activeIdx]; const i = favs.findIndex(f => f.url === t.url); i > -1 ? favs.splice(i, 1) : favs.push(t); localStorage.setItem('zakir_favs_v22', JSON.stringify(favs)); updateFavIcon(); refreshFavs(); }
+        function updateFavIcon() { if(activeIdx === -1) return; const isF = favs.some(f => f.url === playlist[activeIdx].url); document.getElementById('fHeart').className = isF ? 'fas fa-heart' : 'far fa-heart'; document.getElementById('fHeart').style.color = isF ? 'red' : ''; }
+        function refreshFavs() { document.getElementById('favList').innerHTML = favs.map((t, i) => `<div class="track-card"><div class="track-meta" onclick='play(${i}, ${JSON.stringify(favs).replace(/'/g, "&apos;")})'><h4>${t.title}</h4></div><button class="btn-play-sm" onclick='play(${i}, ${JSON.stringify(favs).replace(/'/g, "&apos;")})'><i class="fas fa-play"></i></button></div>`).join(favs.length?'':'<p style="text-align:center; padding-top:50px; opacity:0.5;">لا توجد مفضلات</p>'); }
+        function quick(q) { document.getElementById('qInput').value = q; performSearch(); }
+        function openFull() { document.getElementById('fullPlayer').style.display = 'flex'; }
+        function closeFull() { document.getElementById('fullPlayer').style.display = 'none'; }
+        function nextPrev(dir) { if(activeIdx+dir >= 0 && activeIdx+dir < playlist.length) play(activeIdx+dir, playlist); }
+        function setSpeed() { const s = [1, 1.25, 1.5, 2, 0.75]; let n = s[(s.indexOf(audio.playbackRate) + 1) % s.length]; audio.playbackRate = n; document.getElementById('speedVal').innerText = n + 'x'; }
         function setTimer() { const m = prompt("إيقاف بعد (دقائق):", "30"); if(m) setTimeout(() => audio.pause(), m*60000); }
-        function showAbout() { alert("تطبيق ذاكر\nتطوير: أبوالحسن عبدالهادي tgg4\nنسألكم الدعاء لي بالتوفيق والقبول."); }
-        function shareApp() { alert("رابط التطبيق من تطوير tgg4\nانسخ رابط الموقع من المتصفح وشاركه مع أحبابك."); }
+        function showInfo() { alert("ذاكر\nتطوير: أبوالحسن عبدالهادي tgg4\nنسألكم الدعاء لي بالتوفيق والقبول."); }
+        function shareApp() { alert("تطبيق ذاكر - tgg4\nشارك الرابط مع أحبابك لتعم الفائدة."); }
 
         init();
-        document.getElementById('searchInput').onkeypress = (e) => { if(e.key === 'Enter') performSearch(); };
+        document.getElementById('qInput').onkeypress = (e) => { if(e.key === 'Enter') performSearch(); };
     </script>
 </body>
 </html>
 
+ 
