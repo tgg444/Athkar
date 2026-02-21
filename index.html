@@ -107,7 +107,7 @@
 <body>
 
     <!-- Upper Credits -->
-    <div class="credits-banner">تطوير: أبو الحسن tgg4 - نسألكم الدعاء بالتوفيق</div>
+    <div class="credits-banner">تطوير: أبوالحسن عبدالهادي tgg4 - نسألكم الدعاء بالتوفيق</div>
 
     <header class="main-header">
         <div class="header-icons">
@@ -433,7 +433,7 @@
         function playPrevNext(dir) { if(currentIndex+dir >= 0 && currentIndex+dir < playlist.length) playTrack(currentIndex+dir, playlist); }
         function cycleSpeed() { const s = [1, 1.25, 1.5, 2, 0.75]; let next = s[(s.indexOf(audio.playbackRate) + 1) % s.length]; audio.playbackRate = next; document.getElementById('speedDisplay').innerText = next + 'x'; }
         function setTimer() { const m = prompt("إيقاف بعد (دقائق):", "30"); if(m) setTimeout(() => audio.pause(), m*60000); }
-        function showAbout() { alert("تطبيق ذاكر\nتطوير: أبو الحسن tgg4\nنسألكم الدعاء لي بالتوفيق والقبول."); }
+        function showAbout() { alert("تطبيق ذاكر\nتطوير: أبوالحسن عبدالهادي tgg4\nنسألكم الدعاء لي بالتوفيق والقبول."); }
         function shareApp() { alert("رابط التطبيق من تطوير tgg4\nانسخ رابط الموقع من المتصفح وشاركه مع أحبابك."); }
 
         init();
